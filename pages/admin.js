@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
+
   useEffect(() => {
     async function fetchUsers() {
       try {
-           const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
         const res = await fetch(`${baseUrl}/api/admin/users`);
         if (res.ok) {
           const data = await res.json();
-          setUsers(data.users);
-        }
+          // The backend returns an array of users; adjust if it returns { users }
+          setUsers(Array.isArray(data) ? data : data.users || []);
         }
       } catch (err) {
         console.error(err);
