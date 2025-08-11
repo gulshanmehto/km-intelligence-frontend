@@ -5,10 +5,12 @@ export default function Admin() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await fetch('/api/admin/users');
+           const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+        const res = await fetch(`${baseUrl}/api/admin/users`);
         if (res.ok) {
           const data = await res.json();
           setUsers(data.users);
+        }
         }
       } catch (err) {
         console.error(err);
