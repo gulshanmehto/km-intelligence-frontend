@@ -6,7 +6,10 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('/api/km/metrics');
+            const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+          // Use baseUrl for API calls
+         
+        const res = await fetch(`${baseUrl}/api/km/metrics`);
         const json = await res.json();
         setData(json);
       } catch (e) {
