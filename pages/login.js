@@ -9,23 +9,23 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = isSignup ? '/api/signup' : '/api/login';
-      const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
-      const apiUrl = `${baseUrl}${endpoint}`;
-      // Use apiUrl for API calls
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+    const apiUrl = `${baseUrl}${endpoint}`;
+    // Use apiUrl for API calls
     try {
       const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-});
       const data = await res.json();
       if (res.ok) {
-        setMessage('Success!');
+        setMessage(isSignup ? 'Signup successful!' : 'Login successful!');
       } else {
         setMessage(data.error || 'An error occurred');
       }
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       setMessage('Network error');
     }
   };
