@@ -8,10 +8,11 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Determine endpoint based on mode
     const endpoint = isSignup ? '/api/signup' : '/api/login';
-    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+    // Use environment variable or default backend URL
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://km-intelligence-backend.vercel.app';
     const apiUrl = `${baseUrl}${endpoint}`;
-    // Use apiUrl for API calls
     try {
       const res = await fetch(apiUrl, {
         method: 'POST',

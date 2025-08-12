@@ -6,7 +6,7 @@ export default function Admin() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://km-intelligence-backend.vercel.app';
         const res = await fetch(`${baseUrl}/api/admin/users`);
         if (res.ok) {
           const data = await res.json();
@@ -38,9 +38,9 @@ export default function Admin() {
             <tr key={u.email}>
               <td className="px-6 py-4">{u.email}</td>
               <td className="px-6 py-4">{u.role}</td>
-              <td className="px-6 py-4">{u.metaAccounts?.length || 0}</td>
-              <td className="px-6 py-4">{u.googleAccounts?.length || 0}</td>
-              <td className="px-6 py-4">{u.shopifyStores?.length || 0}</td>
+              <td className="px-6 py-4">{u.metaAccounts ?? 0}</td>
+              <td className="px-6 py-4">{u.googleAccounts ?? 0}</td>
+              <td className="px-6 py-4">{u.shopifyStores ?? 0}</td>
             </tr>
           ))}
         </tbody>

@@ -3,23 +3,24 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
+
   useEffect(() => {
     async function fetchData() {
       try {
-            const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
-          // Use baseUrl for API calls
-         
+        // Determine base URL: use environment variable if provided, otherwise default to deployed backend
+        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://km-intelligence-backend.vercel.app';
         const res = await fetch(`${baseUrl}/api/km/metrics`);
         const json = await res.json();
         setData(json);
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(error);
       }
     }
     fetchData();
   }, []);
 
   if (!data) return <p>Loading...</p>;
+
   const { kpis, timeseries, tables } = data;
 
   return (
