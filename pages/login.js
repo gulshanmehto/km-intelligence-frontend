@@ -8,13 +8,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Determine endpoint based on mode
     const endpoint = isSignup ? '/api/signup' : '/api/login';
-    // Use environment variable or default backend URL
-    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://km-intelligence-backend.vercel.app';
-    const apiUrl = `${baseUrl}${endpoint}`;
     try {
-      const res = await fetch(apiUrl, {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -23,7 +19,7 @@ export default function Login() {
       if (res.ok) {
         setMessage(isSignup ? 'Signup successful!' : 'Login successful!');
       } else {
-        setMessage(data.error || 'An error occurred');
+        setMessage(data.message || 'An error occurred');
       }
     } catch (error) {
       console.error(error);
@@ -42,6 +38,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="w-full border rounded p-2"
+            required
           />
           <input
             type="password"
@@ -49,6 +46,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             className="w-full border rounded p-2"
+            required
           />
           {message && <p className="text-red-500">{message}</p>}
           <button

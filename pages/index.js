@@ -2,24 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
+  // Local state to hold the metrics data and any error messages
   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        // Determine base URL: use environment variable if provided, otherwise default to deployed backend
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://km-intelligence-backend.vercel.app';
-        const res = await fetch(`${baseUrl}/api/km/metrics`);
+        // Fetch from our own API endpoint.  In production this will be proxied
+        // to the backend through Next.js rewrites (see next.config.js).
+        const res = await fetch('/api/km/metrics');
+        if (!res.ok) {
+          throw new Error('Failed to fetch metrics');
+        }
         const json = await res.json();
         setData(json);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load data');
       }
     }
     fetchData();
   }, []);
 
-  if (!data) return <p>Loading...</p>;
+  // If an error occurred, show it to the user
+  if (error) {
+    return <p>{error}</p>;
+  }
+  // Show a loading state until data is fetched
+  if (!data) {
+    return <p>Loading...</p>;
+  }
 
   const { kpis, timeseries, tables } = data;
 

@@ -2,23 +2,26 @@ import { useState, useEffect } from 'react';
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://km-intelligence-backend.vercel.app';
-        const res = await fetch(`${baseUrl}/api/admin/users`);
-        if (res.ok) {
-          const data = await res.json();
-          // The backend returns an array of users; adjust if it returns { users }
-          setUsers(Array.isArray(data) ? data : data.users || []);
-        }
+        const res = await fetch('/api/admin/users');
+        if (!res.ok) throw new Error('Failed to fetch users');
+        const data = await res.json();
+        setUsers(Array.isArray(data) ? data : data.users || []);
       } catch (err) {
         console.error(err);
+        setError('Failed to load users');
       }
     }
     fetchUsers();
   }, []);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="p-6">
